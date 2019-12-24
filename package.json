@@ -1,0 +1,51 @@
+{
+  "name": "socless-visualizer-vscode",
+  "displayName": "socless-visualizer-vscode",
+  "description": "",
+  "icon": "",
+  "version": "0.0.1",
+  "publisher": "saxonh",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/noxasaxon/socless-visualizer-vscode.git"
+  },
+  "engines": {
+    "vscode": "^1.28.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:extension.showSOCless"
+  ],
+  "main": "./out/extension",
+  "contributes": {
+    "commands": [
+      {
+        "command": "extension.showSOCless",
+        "title": "Show SOCless Playbook"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "postinstall": "node ./node_modules/vscode/bin/install",
+    "test": "npm run compile && node ./node_modules/vscode/bin/test"
+  },
+  "devDependencies": {
+    "@types/js-yaml": "^3.11.2",
+    "@types/lodash": "^4.14.149",
+    "@types/mocha": "^2.2.42",
+    "@types/node": "^8.10.25",
+    "aws-sdk": "^2.390.0",
+    "typescript": "^2.9.2",
+    "vscode": "^1.1.26"
+  },
+  "dependencies": {
+    "js-yaml": "^3.13.1",
+    "lodash": "^4.17.15",
+    "viz.js": "^2.1.2"
+  }
+}

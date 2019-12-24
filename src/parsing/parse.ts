@@ -54,6 +54,7 @@ interface Definition {
 
 function getDefinition(document: any): Definition {
   if (isStateFunctionDefinition(document)) {
+    console.log(document)
     // return {
     //   StartAt: document.StartAt,
     //   States: document.States

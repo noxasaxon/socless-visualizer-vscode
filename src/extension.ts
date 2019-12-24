@@ -5,18 +5,25 @@ import logger from "./logger";
 import * as path from "path";
 import { _getHtmlForWebview, renderError } from "./rendering/render";
 import { debounce } from "./util";
-// import { StepFunction } from "./interfaces";
-import Apb from './apb'
+import apb from './apb'
 
 async function updateContent(activeFilePath: string, panel) {
   console.log("VSCE updateContent");
   let renderingResult;
 
   try {
-    const document = await parse(activeFilePath);
-    const stepFunction = new Apb(document).StateMachine
-    renderingResult = await visualize(stepFunction);
+    const stepFunction = await parse(activeFilePath);
+    try {
+      console.log('attempt socless render')
+      renderingResult = await visualize(new apb(stepFunction).StateMachine);
+      console.log('socless render')
+    } catch {
+      renderingResult = await visualize(stepFunction);
+      console.log('regular render')
+    }
+    
   } catch (error) {
+    console.log('external error!')
     renderingResult = renderError(error);
   }
 
@@ -56,13 +63,7 @@ export function activate(context: vscode.ExtensionContext) {
 
       try {
         const stepFunction = await parse(activeFilePath);
-        console.log('read sf: ')
-        console.log(stepFunction)
-
-        const renderedPlaybook = new Apb(stepFunction).StateMachine
-        console.log(renderedPlaybook)
-        // const renderingResult = await visualize(stepFunction);
-        const renderingResult = await visualize(renderedPlaybook);
+        const renderingResult = await visualize(stepFunction);
 
         panel.webview.html = _getHtmlForWebview(
           context.extensionPath,

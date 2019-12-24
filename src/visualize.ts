@@ -16,7 +16,6 @@ function color_task_failure_steps(stepFunction: StepFunction): string {
     const result = state_name.match(/_task_fail|end_with_failure/i);
     
     if(result){
-        console.log(result.input)
         failure_steps_colors += `\n "${result.input}" [style=filled, fillcolor="#faa000"];`
     }
 
@@ -27,11 +26,10 @@ function color_task_failure_steps(stepFunction: StepFunction): string {
 
 function buildTransitions(stepFunction: StepFunction): SubgraphData {
   const transitions: any[] = [];
-  const step_state_names: string[] = Object.keys(stepFunction.States)
 
-  const subgraphData = makeSubgraph(step_state_names);
+  const subgraphData = makeSubgraph(Object.keys(stepFunction.States));
 
-  step_state_names.map(stateName => {
+  Object.keys(stepFunction.States).map(stateName => {
     const state = stepFunction.States[stateName];
 
     if (state.Type === "Parallel") {
@@ -88,7 +86,6 @@ function buildTransitions(stepFunction: StepFunction): SubgraphData {
       // }
       // const subgraphGroup = makeChoicesSubgraph(subgraphNames, "Choice");
       // transitions.push(subgraphGroup);
-
     }
     
     if (!state.Next && state.End) {
@@ -101,7 +98,6 @@ function buildTransitions(stepFunction: StepFunction): SubgraphData {
     subgraphName: subgraphData.subgraphName
   };
 }
-
 
 function getEndStateName(stepFunction: StepFunction) {
   return Object.keys(stepFunction.States).find(stateName => {
@@ -198,10 +194,9 @@ export default async function visualize(stepFunction: StepFunction) {
         "${stepFunction.StartAt}" [style=filled, fillcolor="#FED362"];
         "${getEndStateName(stepFunction)}" [style=filled, fillcolor="#FED362"];
         ${color_task_failure_steps(stepFunction)}
+        
         { rank = sink; "${getEndStateName(stepFunction)}"; }
         { rank = source; "${stepFunction.StartAt}"; }
-
-        
 
     }
     `;

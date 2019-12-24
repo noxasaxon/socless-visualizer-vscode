@@ -16,7 +16,8 @@ function color_task_failure_steps(stepFunction: StepFunction): string {
     const result = state_name.match(/_task_fail|end_with_failure/i);
     
     if(result){
-        failure_steps_colors += `\n "${result.input}" [style=filled, fillcolor="#faa000"];`
+        // failure_steps_colors += `\n "${result.input}" [style=filled, fillcolor="#faa000"];`
+        failure_steps_colors += `\n "${result.input}" [style=filled, fillcolor="#ff6e6e"];`
     }
 
   })

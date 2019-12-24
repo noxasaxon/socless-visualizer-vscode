@@ -44,10 +44,7 @@ export function activate(context: vscode.ExtensionContext) {
 
       const fileName = activeFilePath.split(/\/|\\/).reverse()[0];
 
-      const resourceColumn =
-        (vscode.window.activeTextEditor &&
-          vscode.window.activeTextEditor.viewColumn) ||
-        vscode.ViewColumn.One;
+      const resourceColumn = (vscode.window.activeTextEditor && vscode.window.activeTextEditor.viewColumn) || vscode.ViewColumn.One;
 
       const panel = vscode.window.createWebviewPanel(
         fileName,
@@ -63,7 +60,15 @@ export function activate(context: vscode.ExtensionContext) {
 
       try {
         const stepFunction = await parse(activeFilePath);
-        const renderingResult = await visualize(stepFunction);
+        let renderingResult
+        try {
+          console.log('attempt socless render')
+          renderingResult = await visualize(new apb(stepFunction).StateMachine);
+          console.log('socless render')
+        } catch {
+          renderingResult = await visualize(stepFunction);
+          console.log('regular render')
+        }
 
         panel.webview.html = _getHtmlForWebview(
           context.extensionPath,
